@@ -9,5 +9,8 @@
 import UIKit
 
 final class DistressCell: UICollectionViewCell {
+    @IBOutlet var caseLabel: UILabel!
+    @IBOutlet var imageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var descriptionLabel: UILabel!
 }

@@ -1,19 +1,18 @@
 //
-//  DetailViewController.swift
+//  DetailCollectionViewController.swift
 //  DwabitSecurity
 //
-//  Created by Kelvin Lau on 2016-03-05.
+//  Created by Kelvin Lau on 2016-03-06.
 //  Copyright © 2016 Dwabit. All rights reserved.
 //
 
 import UIKit
 import Firebase
 
-final class DetailViewController: UIViewController {
-    @IBOutlet var collectionView: UICollectionView! { didSet {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-    }}
+final class DetailCollectionViewController: UICollectionViewController {
+    private enum Cells: Int {
+        case Victim, Suspect
+    }
     
     private let infoRef = Firebase(url: "https://dwabit.firebaseio.com/UserInfo")
     private let imageRef = Firebase(url: "https://dwabit.firebaseio.com/DistressImages")
@@ -30,7 +29,9 @@ final class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        layout.itemSize = CGSize(width: view.frame.width / 2, height: view.frame.width / 2)
+
         infoRef.childByAppendingPath(name).observeEventType(.Value, withBlock: { snapshot in
             if snapshot.value is NSNull {
                 fatalError()
@@ -45,24 +46,15 @@ final class DetailViewController: UIViewController {
             self.distressImages = snapshot.children.map { DistressImage(snapshot: $0 as! FDataSnapshot) }
         })
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = CGSize(width: collectionView.frame.width / 2.1, height: collectionView.frame.width / 1.1)
-    }
 }
 
-extension DetailViewController: UICollectionViewDataSource {
-    private enum Cells: Int {
-        case Victim, Suspect
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+// MARK: - UICollectionViewDataSource
+extension DetailCollectionViewController {
+    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 2
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         guard let cellGroup = Cells(rawValue: indexPath.row) else { fatalError() }
         switch cellGroup {
         case .Victim:
@@ -78,8 +70,9 @@ extension DetailViewController: UICollectionViewDataSource {
             return cell
         }
     }
-}
-
-extension DetailViewController: UICollectionViewDelegate {
     
+    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", forIndexPath: indexPath) as? CustomHeader else { fatalError() }
+        return header
+    }
 }

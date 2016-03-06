@@ -32,8 +32,9 @@ final class DistressCollectionViewController: UICollectionViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let destinationViewController = segue.destinationViewController as! DetailViewController
-        destinationViewController.distressImageRef = imageRef.childByAppendingPath(sender as! String)
+        let destinationVC = segue.destinationViewController as! DetailViewController
+        destinationVC.name = sender as! String
+        print(sender)
     }
 }
 
@@ -42,18 +43,22 @@ extension DistressCollectionViewController {
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? DistressCell else { fatalError() }
         let distressSignal = data[indexPath.row]
-        cell.nameLabel.text = "\(distressSignal.name), \(distressSignal.latitude), \(distressSignal.longitude)"
+        cell.nameLabel.text = "\(distressSignal.name)"
         return cell
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count
     }
+    
+    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        return collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", forIndexPath: indexPath)
+    }
 }
 
 // MARK: - UICollectionViewDelegate
 extension DistressCollectionViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("DetailSegue", sender: data[indexPath.row].name)
+        performSegueWithIdentifier("ShowDetail", sender: data[indexPath.row].name)
     }
 }

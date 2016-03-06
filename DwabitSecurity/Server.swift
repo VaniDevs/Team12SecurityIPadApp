@@ -12,5 +12,4 @@ final class Server {
     private init() {}
     
     private let firebaseRootRef = Firebase(url: "https://dwabit.firebaseio.com")
-
 }
