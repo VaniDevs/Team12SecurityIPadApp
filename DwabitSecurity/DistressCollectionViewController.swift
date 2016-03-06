@@ -23,6 +23,13 @@ final class DistressCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let titleImageView = UIImageView(image: UIImage(named: "group"))
+        titleImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        titleImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        
+        navigationItem.titleView = titleImageView
+        
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = CGSize(width: view.frame.width / 3 - 50, height: view.frame.width / 3 - 50)
         
@@ -36,6 +43,7 @@ final class DistressCollectionViewController: UICollectionViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let destinationVC = segue.destinationViewController as! DetailViewController
         destinationVC.name = sender as! String
+        
         print(sender)
     }
 }

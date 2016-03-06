@@ -25,7 +25,11 @@ final class DetailCollectionViewController: UICollectionViewController {
         }
     }
     
-    var distressImages: [DistressImage]!
+    var distressImages: [DistressImage]! {
+        didSet {
+            print(distressImages.count)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

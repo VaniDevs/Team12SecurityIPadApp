@@ -12,7 +12,9 @@ import MapKit
 final class VictimCell: UICollectionViewCell {
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var genderAgeLabel: UILabel!
-    @IBOutlet var profileImageView: UIImageView!
+    @IBOutlet var profileImageView: UIImageView! { didSet {
+        profileImageView.backgroundColor = UIColor.lightGrayColor()
+    }}
     @IBOutlet var addressLabel: UILabel!
     @IBOutlet var mapView: MKMapView!
     

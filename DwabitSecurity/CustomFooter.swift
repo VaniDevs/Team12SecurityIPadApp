@@ -21,17 +21,16 @@ final class CustomFooter: UICollectionReusableView {
         collectionView.delegate = self
     }}
     
-    private let name = "Meyrl"
+    var name: String? { didSet {
+        beginWatching()
+    }}
     private let imageRef = Firebase(url: "https://dwabit.firebaseio.com/DistressImages")
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        imageRef.childByAppendingPath(name).observeEventType(.Value, withBlock: { snapshot in
-            if snapshot.value is NSNull {
-                fatalError()
-            }
-            self.distressImages = snapshot.children.map { DistressImage(snapshot: $0 as! FDataSnapshot) }
-        })
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.itemSize = CGSize(width: collectionView.frame.width / 3, height: collectionView.frame.width / 3)
+
     }
 }
 
@@ -41,9 +40,9 @@ extension CustomFooter: UICollectionViewDataSource {
         
         let imageString = distressImages[indexPath.row].imageString
         
-        let decodedData = NSData(base64EncodedString: imageString, options: NSDataBase64DecodingOptions(rawValue: 0))
+        let decodedData = NSData(base64EncodedString: imageString, options: .IgnoreUnknownCharacters)
         let decodedimage = UIImage(data: decodedData!)!
-        cell.imageView.image = decodedimage as UIImage
+        cell.imageView.image = decodedimage
         return cell
     }
     
@@ -53,5 +52,12 @@ extension CustomFooter: UICollectionViewDataSource {
 }
 
 extension CustomFooter: UICollectionViewDelegate {
-    
+    func beginWatching() {
+        imageRef.childByAppendingPath(name).observeEventType(.Value, withBlock: { snapshot in
+            if snapshot.value is NSNull {
+                fatalError()
+            }
+            self.distressImages = snapshot.children.map { DistressImage(snapshot: $0 as! FDataSnapshot) }
+        })
+    }
 }

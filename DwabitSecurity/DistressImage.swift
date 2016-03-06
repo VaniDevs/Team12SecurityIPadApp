@@ -19,6 +19,6 @@ struct DistressImage {
     }
     
     init(snapshot: FDataSnapshot) {
-        imageString = snapshot.value as! String
+        imageString = snapshot.value["image"] as! String
     }
 }

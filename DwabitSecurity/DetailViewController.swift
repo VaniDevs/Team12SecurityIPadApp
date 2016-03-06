@@ -36,7 +36,6 @@ final class DetailViewController: UIViewController {
             }
             self.userInfo = UserInfo(snapshot: snapshot)
         })
-        
 
     }
     
@@ -65,6 +64,7 @@ extension DetailViewController: UICollectionViewDataSource {
                 cell.addressLabel.text = userInfo.address
                 cell.nameLabel.text = userInfo.name
                 cell.genderAgeLabel.text = "\(userInfo.gender), \(userInfo.age)"
+                cell.mapView.setCenterCoordinate(<#T##coordinate: CLLocationCoordinate2D##CLLocationCoordinate2D#>, animated: <#T##Bool#>)
             }
             return cell
         case .Suspect:
@@ -75,6 +75,7 @@ extension DetailViewController: UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         guard let footer = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", forIndexPath: indexPath) as? CustomFooter else { fatalError() }
+        footer.name = name
         return footer
     }
 }

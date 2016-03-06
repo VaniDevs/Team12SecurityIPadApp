@@ -10,7 +10,9 @@ import UIKit
 
 final class DistressCell: UICollectionViewCell {
     @IBOutlet var caseLabel: UILabel!
-    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var imageView: UIImageView! { didSet {
+        imageView.backgroundColor = UIColor.lightGrayColor()
+    }}
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var descriptionLabel: UILabel!
     @IBOutlet var callButton: UIButton!
