@@ -16,7 +16,6 @@ final class DetailViewController: UIViewController {
     }}
     
     private let infoRef = Firebase(url: "https://dwabit.firebaseio.com/UserInfo")
-    private let imageRef = Firebase(url: "https://dwabit.firebaseio.com/DistressImages")
     
     var name: String!
     
@@ -38,12 +37,7 @@ final class DetailViewController: UIViewController {
             self.userInfo = UserInfo(snapshot: snapshot)
         })
         
-        imageRef.childByAppendingPath(name).observeEventType(.ChildAdded, withBlock: { snapshot in
-            if snapshot.value is NSNull {
-                fatalError()
-            }
-            self.distressImages = snapshot.children.map { DistressImage(snapshot: $0 as! FDataSnapshot) }
-        })
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -77,6 +71,11 @@ extension DetailViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier("SuspectCell", forIndexPath: indexPath) as? SuspectCell else { fatalError() }
             return cell
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        guard let footer = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", forIndexPath: indexPath) as? CustomFooter else { fatalError() }
+        return footer
     }
 }
 

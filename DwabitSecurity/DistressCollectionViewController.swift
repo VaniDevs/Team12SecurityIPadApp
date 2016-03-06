@@ -19,10 +19,12 @@ final class DistressCollectionViewController: UICollectionViewController {
         collectionView?.reloadSections(NSIndexSet(index: 0))
     }}
     
+    static var caseNumber = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
+        layout.itemSize = CGSize(width: view.frame.width / 3 - 50, height: view.frame.width / 3 - 50)
         
         ref.observeEventType(.Value, withBlock: { snapshot in
             self.data = snapshot.children.map { DistressSignal(snapshot: $0 as! FDataSnapshot) }
@@ -44,6 +46,9 @@ extension DistressCollectionViewController {
         guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? DistressCell else { fatalError() }
         let distressSignal = data[indexPath.row]
         cell.nameLabel.text = "\(distressSignal.name)"
+        cell.caseLabel.text = "Case #\(DistressCollectionViewController.caseNumber)"
+        cell.callButton.setTitle("Call \(distressSignal.name)", forState: .Normal)
+        DistressCollectionViewController.caseNumber += 1
         return cell
     }
     

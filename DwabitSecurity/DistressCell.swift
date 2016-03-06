@@ -13,4 +13,5 @@ final class DistressCell: UICollectionViewCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var descriptionLabel: UILabel!
+    @IBOutlet var callButton: UIButton!
 }
